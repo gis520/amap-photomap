@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="UTF-8">
+    <title>Amap-photomap by gis520</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
+  </head>
+  <body>
+    <section class="page-header">
+      <h1 class="project-name">Amap-photomap</h1>
+      <h2 class="project-tagline">使用amap API实现相册在地图上定位展示demo，鼠标移动图片marker时放大展示</h2>
+      <a href="https://github.com/gis520/amap-photomap" class="btn">View on GitHub</a>
+      <a href="https://github.com/gis520/amap-photomap/zipball/master" class="btn">Download .zip</a>
+      <a href="https://github.com/gis520/amap-photomap/tarball/master" class="btn">Download .tar.gz</a>
+    </section>
+
+    <section class="main-content">
+      <p>&lt;!doctype html&gt;
+</p>
+
+<p></p>
+    
+    
+    
+    PhotoMap
+    
+    
+    .amap-marker .marker_area {
+        width: 44px;
+        height: 34px;
+        padding: 5px 23px 13px 5px;
+        background: url(&lt;a href="http://ditu.amap.com/assets/img/livephoto_aera.png"&gt;http://ditu.amap.com/assets/img/livephoto_aera.png&lt;/a&gt;) center center no-repeat;
+        background-size: cover;
+        position: relative;
+        cursor: pointer;
+    }&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;.amap-marker .marker-marker-bus-from {
+    background-position: -334px -180px;
+}
+
+.photo_thumb {
+    background-position: center center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    width: 100%;
+    height: 100%;
+}
+
+.marker_area .marker_area_name {
+    display: none;
+    position: absolute;
+    left: 14px;
+    bottom: 20px;
+    color: #333;
+    padding-left: 20px;
+    height: 24px;
+    line-height: 24px;
+    width: 160px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    background: url(http://ditu.amap.com/assets/img/photo_loc_icon.png) left center no-repeat;
+}
+
+.marker_area.photo_hover .marker_area_name {
+    display: block;
+}
+
+.marker_area.photo_hover {
+    bottom: 109px;
+    left: -71px;
+    width: 184px;
+    height: 106px;
+    padding: 9px 52px 48px 9px;
+    background: url(http://ditu.amap.com/assets/img/photo_hover.png) center center no-repeat;
+    background-size: cover;
+}
+&amp;lt;/style&amp;gt;
+&amp;lt;script src=&amp;quot;http://cdn.bootcss.com/jquery/2.2.3/jquery.js&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
+&amp;lt;script type=&amp;quot;text/javascript&amp;quot; src=&amp;quot;http://webapi.amap.com/maps?v=1.3&amp;amp;key=您申请的key值&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
+&amp;lt;script type=&amp;quot;text/javascript&amp;quot; src=&amp;quot;http://cache.amap.com/lbs/static/addToolbar.js&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;/head&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;body&gt;
+    &lt;div id="container"&gt;&lt;/div&gt;
+    &lt;script type="text/javascript"&gt;
+    var map = new AMap.Map(&amp;quot;container&amp;quot;, {
+        resizeEnable: true,
+        center: [116.397428, 39.90923], //地图中心点
+        zoom: 13 //地图显示的缩放级别
+    });
+    map.clearMap();  // 清除地图覆盖物
+    var markers = [{
+        name:&amp;#39;天安门&amp;#39;,
+        icon: &amp;#39;&lt;a href="http://aos-cdn-image.amap.com/sns/ugc/photo/ddef3ad045b743dfa1464e83cefc35b7.jpg"&gt;http://aos-cdn-image.amap.com/sns/ugc/photo/ddef3ad045b743dfa1464e83cefc35b7.jpg&lt;/a&gt;&amp;#39;,
+        position: [116.397428, 39.90923]
+    }, {
+        name:&amp;#39;giscafer&amp;#39;,
+        icon: &amp;#39;&lt;a href="https://avatars0.githubusercontent.com/u/8676711?v=3&amp;amp;s=460"&gt;https://avatars0.githubusercontent.com/u/8676711?v=3&amp;amp;s=460&lt;/a&gt;&amp;#39;,
+        position: [116.368904, 39.913423]
+    }, {
+        name: &amp;#39;gis520&amp;#39;,
+        icon: &amp;#39;&lt;a href="https://avatars0.githubusercontent.com/u/17235971?v=3&amp;amp;s=200"&gt;https://avatars0.githubusercontent.com/u/17235971?v=3&amp;amp;s=200&lt;/a&gt;&amp;#39;,
+        position: [116.335467, 39.907761]
+    }];
+    // 添加一些分布不均的点到地图上,地图上添加三个点标记，作为参照
+    markers.forEach(function(marker) {
+        new AMap.Marker({
+            map: map,
+            position: [marker.position[0], marker.position[1]],
+            offset: new AMap.Pixel(-17, -42), //相对于基点的偏移位置
+            draggable: false, //是否可拖动
+            content: &amp;#39;&lt;div class="marker_area"&gt;&lt;div class="photo_thumb" style="background-image:url('+marker.icon+'<a href="https://github.com/200h" class="user-mention">@200h</a>)"&gt;&lt;/div&gt;&lt;span class="marker_area_name"&gt;&amp;#39;+marker.name+&amp;#39;&lt;/span&gt;&lt;/div&gt;&amp;#39; //
+        });
+    });
+    /&lt;em&gt;var marker = new AMap.Marker({ //添加自定义点标记
+        map: map,
+        position: [116.397428, 39.90923], //基点位置
+        offset: new AMap.Pixel(-17, -42), //相对于基点的偏移位置
+        draggable: false, //是否可拖动
+        content: &amp;#39;&lt;div class="marker_area"&gt;&lt;div class="photo_thumb" style="background-image:url(http://aos-cdn-image.amap.com/sns/ugc/photo/ddef3ad045b743dfa1464e83cefc35b7.jpg@200h)"&gt;&lt;/div&gt;&lt;span class="marker_area_name"&gt;天安门&lt;/span&gt;&lt;/div&gt;&amp;#39; //自定义点标记覆盖物内容
+    });&lt;/em&gt;/
+    var mapContainer=$(&amp;quot;#container&amp;quot;);
+    mapContainer.on(&amp;quot;mouseenter&amp;quot;, &amp;quot;.marker_area&amp;quot;, function() {
+    console.log(333);
+    $(this).addClass(&amp;quot;photo_hover&amp;quot;), s = $(this).closest(&amp;quot;.amap-marker&amp;quot;).attr(&amp;quot;style&amp;quot;), $(this).closest(&amp;quot;.amap-marker&amp;quot;).addClass(&amp;quot;hover&amp;quot;), map.set(&amp;quot;isHotspot&amp;quot;, !1)});
+    mapContainer.on(&amp;quot;mouseleave&amp;quot;, &amp;quot;.marker_area&amp;quot;, function() { $(this).removeClass(&amp;quot;photo_hover&amp;quot;), $(this).closest(&amp;quot;.amap-marker&amp;quot;).removeClass(&amp;quot;hover&amp;quot;), map.set(&amp;quot;isHotspot&amp;quot;, !0) });
+            var newCenter = map.setFitView();
+    &lt;/script&gt;
+   &lt;a href="https://github.com/gis520/amap-photomap"&gt;&lt;img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/652c5b9acfaddf3a9c326fa6bde407b87f7be0f4/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f6f72616e67655f6666373630302e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_orange_ff7600.png"&gt;&lt;/a&gt;
+&lt;/body&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;/html&gt;&lt;/p&gt;
+
+      <footer class="site-footer">
+        <span class="site-footer-owner"><a href="https://github.com/gis520/amap-photomap">Amap-photomap</a> is maintained by <a href="https://github.com/gis520">gis520</a>.</span>
+
+        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
+      </footer>
+
+    </section>
+
+  
+  </body>
+</html>
