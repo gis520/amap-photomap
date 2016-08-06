@@ -6,9 +6,12 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no, width=device-width">
     <title>PhotoMap</title>
-    <link rel="stylesheet" href="https://cache.amap.com/lbs/static/main1119.css" />
+    <link rel="stylesheet" href="./css/main1119.css" />
     <style type="text/css">
-    .amap-marker .marker_area {
+    .amap-marker-content {
+        position: relative;
+    }
+    .marker_area {
         width: 44px;
         height: 34px;
         padding: 5px 23px 13px 5px;
@@ -17,11 +20,6 @@
         position: relative;
         cursor: pointer;
     }
-    
-    .amap-marker .marker-marker-bus-from {
-        background-position: -334px -180px;
-    }
-    
     .photo_thumb {
         background-position: center center;
         background-size: cover;
@@ -51,9 +49,9 @@
     }
     
     .marker_area.photo_hover {
-        bottom: 109px;
-        left: -71px;
-        width: 184px;
+       bottom: 109px;
+       left: -71px;
+       width: 184px;
         height: 106px;
         padding: 9px 52px 48px 9px;
         background: url(https://ditu.amap.com/assets/img/photo_hover.png) center center no-repeat;
@@ -61,8 +59,7 @@
     }
     </style>
     <script src="https://cdn.bootcss.com/jquery/2.2.3/jquery.js"></script>
-    <script type="text/javascript" src="https://webapi.amap.com/maps?v=1.3&key=您申请的key值"></script>
-    <script type="text/javascript" src="https://cache.amap.com/lbs/static/addToolbar.js"></script>
+    <script type="text/javascript" src="https://webapi.amap.com/maps?v=1.3&key=ddb4718923a922a569a1484c59a47ed7"></script>
 </head>
 
 <body>
@@ -73,13 +70,13 @@
         center: [116.397428, 39.90923], //地图中心点
         zoom: 13 //地图显示的缩放级别
     });
-    map.clearMap();  // 清除地图覆盖物
+    map.clearMap(); // 清除地图覆盖物
     var markers = [{
-    	name:'天安门',
+        name: '天安门',
         icon: 'https://aos-cdn-image.amap.com/sns/ugc/photo/ddef3ad045b743dfa1464e83cefc35b7.jpg',
         position: [116.397428, 39.90923]
     }, {
-    	name:'giscafer',
+        name: 'giscafer',
         icon: 'https://avatars0.githubusercontent.com/u/8676711?v=3&s=460',
         position: [116.368904, 39.913423]
     }, {
@@ -94,24 +91,31 @@
             position: [marker.position[0], marker.position[1]],
             offset: new AMap.Pixel(-17, -42), //相对于基点的偏移位置
             draggable: false, //是否可拖动
-            content: '<div class="marker_area"><div class="photo_thumb" style="background-image:url('+marker.icon+'@200h)"></div><span class="marker_area_name">'+marker.name+'</span></div>' //
+            content: '<div class="marker_area"><div class="photo_thumb" style="background-image:url(' + marker.icon + '@200h)"></div><span class="marker_area_name">' + marker.name + '</span></div>' //
         });
     });
-    /*var marker = new AMap.Marker({ //添加自定义点标记
-        map: map,
-        position: [116.397428, 39.90923], //基点位置
-        offset: new AMap.Pixel(-17, -42), //相对于基点的偏移位置
-        draggable: false, //是否可拖动
-        content: '<div class="marker_area"><div class="photo_thumb" style="background-image:url(http://aos-cdn-image.amap.com/sns/ugc/photo/ddef3ad045b743dfa1464e83cefc35b7.jpg@200h)"></div><span class="marker_area_name">天安门</span></div>' //自定义点标记覆盖物内容
-    });*/
-    var mapContainer=$("#container");
+    window.onload = function() {
+        map.plugin(["AMap.ToolBar"], function() {
+            map.addControl(new AMap.ToolBar());
+        });
+    };
+    var newCenter = map.setFitView();
+
+    
+    var mapContainer = $("#container");
     mapContainer.on("mouseenter", ".marker_area", function() {
-    console.log(333);
-    $(this).addClass("photo_hover"), s = $(this).closest(".amap-marker").attr("style"), $(this).closest(".amap-marker").addClass("hover"), map.set("isHotspot", !1)});
-    mapContainer.on("mouseleave", ".marker_area", function() { $(this).removeClass("photo_hover"), $(this).closest(".amap-marker").removeClass("hover"), map.set("isHotspot", !0) });
-            var newCenter = map.setFitView();
+        $(this).addClass("photo_hover"), s = $(this).closest(".amap-marker").attr("style"), $(this).closest(".amap-marker").addClass("hover"), map.set("isHotspot", !1)
+    });
+    mapContainer.on("mouseleave", ".marker_area", function() {
+        $(this).removeClass("photo_hover"), $(this).closest(".amap-marker").removeClass("hover"), map.set("isHotspot", !0)
+    });
+    /*mapContainer.on("click", ".marker_area", function(){
+        console.log(111);
+        $(this).addClass("photo_hover"), s = $(this).closest(".amap-marker").attr("style"), $(this).closest(".amap-marker").addClass("hover"), map.set("isHotspot", !1)
+    });*/
+    
     </script>
-   <a href="https://github.com/gis520/amap-photomap"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/652c5b9acfaddf3a9c326fa6bde407b87f7be0f4/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f6f72616e67655f6666373630302e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_orange_ff7600.png"></a>
+    <a href="https://github.com/gis520/amap-photomap"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/652c5b9acfaddf3a9c326fa6bde407b87f7be0f4/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f6f72616e67655f6666373630302e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_orange_ff7600.png"></a>
 </body>
 
 </html>
