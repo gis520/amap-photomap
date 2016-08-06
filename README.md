@@ -10,7 +10,7 @@ https://gis520.github.io/amap-photomap/
 
 ## Screenshot
 
-![截图1](https://raw.githubusercontent.com/gis520/amap-photomap/master/screenshot/show.gif)
+![截图1](https://raw.githubusercontent.com/gis520/amap-photomap/master/screenshot/show_compress.gif)
 
 
 ## License
