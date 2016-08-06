@@ -5,12 +5,13 @@
 
 ## Demo
 
+https://gis520.github.io/amap-photomap/
 
 
 ## Screenshot
 
-![截图1](https://raw.githubusercontent.com/gis520/amap-photomap/master/screenshot/screenshot1.png)
-![截图2](https://raw.githubusercontent.com/gis520/amap-photomap/master/screenshot/screenshot2.png)
+![截图1](https://raw.githubusercontent.com/gis520/amap-photomap/master/screenshot/show.gif)
+
 
 ## License
 ![](https://img.shields.io/badge/license-MIT-blue.svg)
